@@ -17,16 +17,16 @@ const bookSchema = mongoose.Schema(
         },
         categoryId: {
             type: Number,
-            required : true,
+            // required : true,
         },
         category:{
             type: String,
-            // required : true,
+            required : true,
         },
          
-        base64image : {
+        image : {
             type:String,
-            // required : true,
+            required : true,
         } 
       }
 )

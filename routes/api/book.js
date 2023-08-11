@@ -1,5 +1,5 @@
 const express = require("express");
-
+ 
 const router = express.Router();
 const mongoose = require("mongoose");
 const Book = require("../../models/book");
@@ -47,22 +47,26 @@ router.get("/byid", async (req, res) => {
 
 
 
-router.post("/", async (req, res) => {
-  const bookData = req.body;
+router.post("/", async(req, res) => {
+    const bookData = req.body;
+    try {
+    
+        const newBookData = {...bookData, image: req.file}
+        console.log(newBookData); 
+    
+        return res
+          .status(200)
+          .send({ success: true, message: "Book is created successfully", newBookData });
+      } catch (error) {
+        console.log(error);
+        return res.send({
+          success: false,
+          message: `internal server error, ${error.message}`,
+        });
+      }
+} );
 
-  try {
-    const result = await Book.create(bookData);
-
-    return res
-      .status(200)
-      .send({ success: true, message: "Book is created successfully" });
-  } catch (error) {
-    return res.send({
-      success: false,
-      message: `internal server error, ${error.message}`,
-    });
-  }
-});
+ 
 
 
 

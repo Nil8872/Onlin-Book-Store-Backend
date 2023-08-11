@@ -124,7 +124,7 @@ router.put('/updateuser', [ validateArray], async (req, res)=>{
        const result =  await User.updateOne({email:req.body.email}, {$set:{...req.body, password:hashPassword}});
         
        const user = await User.findOne({email:req.body.email})
-        return res.status(200).json({success: true, message:"User upadated successfully", user});
+        return res.status(200).json({success: true, message:"User updated successfully", user});
     } catch (error) {
         console.log(error);
     }
