@@ -1,9 +1,8 @@
     const express = require('express')
     const path = require('path')
     const cors = require('cors') 
-    const fs = require('fs-extra');
+    const fs = require('fs-extra'); 
     
-    // console.log(path.dirname(__dirname.join()))
     require('dotenv').config()
     const multer = require('multer');
     // const upload = multer({dest:'Images/'});
@@ -42,7 +41,7 @@
 
     const auth = require('./routes/api/auth')
     const book = require('./routes/api/book')
-
+    const category = require('./routes/api/category')
 
 
     const app = express()
@@ -63,10 +62,11 @@
 
     app.get("/", (req, res) => { 
         res.send("Hello, world!");
-    })
-    // app.use('/api/auth', require('./routes/auth')); 
+    }) 
+
     app.use("/api/auth", auth);
     app.use("/api/book",upload.single("image"), book);
+    app.use("/api/category", category);
 
 
 

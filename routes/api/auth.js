@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require("../../models/user");
 const {body, validationResult} = require("express-validator");
 const bcrypt = require("bcryptjs");
+const Role = require("../../constant/enum")
+
 
 
 const validateArray = [ body("firstName", "Please enter First Name").trim().notEmpty(),
@@ -42,9 +44,9 @@ router.post("/createuser", [...validateArray ], async (req, res) => {
             const salt = bcrypt.genSaltSync(10);
             const hashPassword =  bcrypt.hashSync(userData.password,salt);
 
-            await User.create({...userData, password: hashPassword});
+            await User.create({...userData, password: hashPassword, role: Role[userData.roleId]});
             return res.send({success: true, message:"User created successfully"}); 
-        }
+        }   
         else{
            return res.status(400).send({success: false, message:"Email is already exist. please try with different email"})
         }
@@ -121,7 +123,7 @@ router.put('/updateuser', [ validateArray], async (req, res)=>{
         const salt = bcrypt.genSaltSync(10);
         const hashPassword =  bcrypt.hashSync(userData.password,salt);
          
-       const result =  await User.updateOne({email:req.body.email}, {$set:{...req.body, password:hashPassword}});
+       const result =  await User.updateOne({email:req.body.email}, {$set:{...req.body, password:hashPassword, role: Role[userData.roleId]}});
         
        const user = await User.findOne({email:req.body.email})
         return res.status(200).json({success: true, message:"User updated successfully", user});
@@ -135,13 +137,23 @@ router.delete("/user", async (req, res)=>{
     let email = req.body.email;
 
     try{
-        const result = await User.deleteOne({email});
-        console.log(result);
+        const result = await User.deleteOne({email}); 
        return  res.status(200).send({success: true, message:"User deleted successfully"})
 
     }catch(error){
         console.log(error);
        return  res.status(500).send("Internal Server Error");
+    }
+})
+
+
+router.get("/all", async (req, res)=>{
+
+    try {
+       const users=  await User.find().select(["-cpassword", "-password", "-__v"]);
+       return res.send({success: true, message:"All users", users})
+    } catch (error) {
+      return res.status(500).send({messag:"Internal Server Error",   success:false, error:error.message});  
     }
 })
 

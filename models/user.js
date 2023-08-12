@@ -25,6 +25,11 @@ const userSchema  = mongoose.Schema({
     },
     roleId : {
         type : Number,
+        required : true
+    }
+    , 
+    role: {
+        type: String 
     }
 })
 
