@@ -23,12 +23,12 @@ router.post("/", async (req, res) => {
 router.get("/all", async (req, res) => {
     try {
         
-        const categories = await Category.find();
+        const categories = await Category.find().select("-__v");
 
         if(categories.length > 0){
             return res.status(200).send({success:true, message:"All categories", categories: categories});
         }
-        return res.status(404).send({success:false, message:"Not Fount"})
+        return res.status(404).send({success:false, message:"Not Fount any Categories"})
 
     } catch (error) {
         res.status(500).send({success: false, message:"Internal server error", error: error.message});
@@ -58,10 +58,10 @@ router.get("/byid", async (req, res)=>{
 
 router.put( "/:id" , async (req, res)=>{
     const id = req.params.id;
-    const newCategory = req.body; 
+    const newCategory = req.body;  
     try {
         const result = await Category.findByIdAndUpdate(id, newCategory, {new: true});
-        console.log(result);
+   
         if(result){
             return res.status(200).send({success:true, message:"Category updated successfully"});
         }
@@ -71,6 +71,23 @@ router.put( "/:id" , async (req, res)=>{
         }
     } catch (error) {
        return res.status(500).send({success: false, message:"Internal server error", error: error.message});
+       
+    }
+})
+
+router.delete( "/:id" , async (req, res)=>{
+    const id = req.params.id;
+    
+    try {
+        const result = await Category.findByIdAndDelete(id);
+         
+        if(result){
+           return res.status(200).send({success:true, message:"Category deleted successfully"});
+
+        }
+        
+    } catch (error) {
+        return res.status(500).send({success: false, message:"Internal server error", error: error.message});
         
     }
 })
