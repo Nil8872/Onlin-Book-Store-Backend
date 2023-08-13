@@ -121,8 +121,7 @@ router.put('/updateuser', [ validateArray], async (req, res)=>{
     try {
 
         const salt = bcrypt.genSaltSync(10);
-        const hashPassword =  bcrypt.hashSync(userData.password,salt);
-         
+        const hashPassword =  bcrypt.hashSync(userData.password,salt); 
        const result =  await User.updateOne({email:req.body.email}, {$set:{...req.body, password:hashPassword, role: Role[userData.roleId]}});
         
        const user = await User.findOne({email:req.body.email})
@@ -130,6 +129,31 @@ router.put('/updateuser', [ validateArray], async (req, res)=>{
     } catch (error) {
         console.log(error);
     }
+})
+
+router.put("/updatebyadmin/:id", async (req, res) => {
+    const {firstName, lastName, roleId} = req.body;
+    const id = req.params.id;
+ 
+    
+    try {
+        const result = await User.updateOne({_id:id}, {$set:{
+            firstName,
+            lastName,
+            roleId,
+            role: Role[roleId]
+        }}, {new: true}); 
+        if(result.acknowledged === true){
+           return res.status(200).json({success: true, message:"User updated successfully"});
+
+        }
+        else{
+            return res.status(404).json({success: false, message:"Something went wrong!"})
+        }
+    } catch (error) {
+        console.log(error);
+    }
+     
 })
 
 

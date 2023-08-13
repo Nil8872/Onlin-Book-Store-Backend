@@ -26,7 +26,8 @@
             const fileTypes = /jpg|jpeg|png/
             const mimeTypes = fileTypes.test(file.mimetype);
             const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-            console.log(path.extname(file.originalname).toLowerCase())
+            
+            
 
             if(mimeTypes && extname){
             return cb(null, true);

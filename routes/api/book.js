@@ -51,39 +51,46 @@ router.post("/", async(req, res) => {
     const bookData = req.body;
     try {
     
-        const newBookData = {...bookData, image: req.file}
-        console.log(newBookData); 
-    
-        return res
-          .status(200)
-          .send({ success: true, message: "Book is created successfully", newBookData });
+        const newBookData = {...bookData, image: req.file.path}
+        
+       const result =  await Book.create(newBookData);
+       if(result){
+
+         return res
+           .status(200)
+           .send({ success: true, message: "Book is created successfully"});
+       }
       } catch (error) {
         console.log(error);
         return res.send({
           success: false,
-          message: `internal server error, ${error.message}`,
+          message: `internal serve  r error, ${error.message}`,
         });
       }
 } );
 
- 
-
-
-
-
 
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
-  const updatedBookData = req.body;
+  let updatedBookData = req.body;
+
+  if(req.file){
+    updatedBookData = {...updatedBookData, image: req.file.path}
+  }
+  console.log(id);
+  console.log(updatedBookData);
 
   try {
     const result = await Book.findByIdAndUpdate(id, updatedBookData, {
       new: true,
     }); 
 
-    return res
-      .status(200)
-      .send({ success: true, message: "Book is updated successfully" });
+    if(result){
+
+      return res
+        .status(200)
+        .send({ success: true, message: "Book is updated successfully" });
+    }
 
   } catch (error) {
 

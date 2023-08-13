@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bookSchema = mongoose.Schema(
     {
         
-        name: {
+        bookName: {
             type: String,
             require : true,
         }  ,
@@ -16,7 +16,7 @@ const bookSchema = mongoose.Schema(
             require : true,
         },
         categoryId: {
-            type: Number,
+            type: String,
             // required : true,
         },
         category:{
