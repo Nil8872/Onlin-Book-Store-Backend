@@ -43,7 +43,7 @@
     const auth = require('./routes/api/auth')
     const book = require('./routes/api/book')
     const category = require('./routes/api/category')
-
+    const cart = require('./routes/api/cart');
 
     const app = express()
     const PORT = process.env.PORT || 5000;
@@ -55,6 +55,7 @@
 
     app.use("/Images", express.static("Images"))
     app.use("/Nilesh/images", express.static("Nilesh/Images"))
+     
 
 
     const {connectDatabase} = require('./db')
@@ -68,6 +69,7 @@
     app.use("/api/auth", auth);
     app.use("/api/book",upload.single("image"), book);
     app.use("/api/category", category);
+    app.use("/api/cart", cart);
 
 
 
