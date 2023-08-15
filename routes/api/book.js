@@ -60,15 +60,13 @@ router.post("/", async(req, res) => {
            .status(200)
            .send({ success: true, message: "Book is created successfully"});
        }
-      } catch (error) {
-        console.log(error);
+      } catch (error) { 
         return res.send({
           success: false,
           message: `internal serve  r error, ${error.message}`,
         });
       }
 } );
-
 
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
@@ -77,8 +75,7 @@ router.put("/:id", async (req, res) => {
   if(req.file){
     updatedBookData = {...updatedBookData, image: req.file.path}
   }
-  console.log(id);
-  console.log(updatedBookData);
+   
 
   try {
     const result = await Book.findByIdAndUpdate(id, updatedBookData, {
