@@ -3,6 +3,11 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Book = require("../../models/book");
+const  cloudinary = require('cloudinary');
+const uploadBase64Image = require('../../services/cloudinary');      
+const { Result } = require("express-validator");
+ 
+
 
 router.get("/all", async (req, res) => {
   try {
@@ -49,11 +54,19 @@ router.get("/byid", async (req, res) => {
 
 router.post("/", async(req, res) => {
     const bookData = req.body;
+
+   
+    const base64Image = req.body.image; 
+   console.log(base64Image);
     try {
-    
-        const newBookData = {...bookData, image: req.file.path}
-        
+
+ 
+      const data =  await uploadBase64Image(base64Image);
+       
+        const newBookData = {...bookData, image: data.url}
+       
        const result =  await Book.create(newBookData);
+        console.log(result)
        if(result){
 
          return res
@@ -61,9 +74,10 @@ router.post("/", async(req, res) => {
            .send({ success: true, message: "Book is created successfully"});
        }
       } catch (error) { 
+        console.log(error);
         return res.send({
           success: false,
-          message: `internal serve  r error, ${error.message}`,
+          message: `internal server error, ${error.message}`,
         });
       }
 } );
@@ -71,9 +85,12 @@ router.post("/", async(req, res) => {
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
   let updatedBookData = req.body;
-
-  if(req.file){
-    updatedBookData = {...updatedBookData, image: req.file.path}
+  console.log(updatedBookData);
+  if((req.body.image).startsWith("data:image/jpeg;base64")){
+    const data =  await uploadBase64Image(req.body.image);
+       
+      updatedBookData = {...updatedBookData, image: data.url}
+     
   }
    
 

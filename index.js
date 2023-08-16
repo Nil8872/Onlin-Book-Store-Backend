@@ -4,38 +4,38 @@
     const fs = require('fs-extra'); 
     
     require('dotenv').config()
-    const multer = require('multer');
+    // const multer = require('multer');
     // const upload = multer({dest:'Images/'});
     // const upload = multer({ dest: 'uploads/' })
 
 
-    const storage = multer.diskStorage({
-        destination: async function (req, file, cb) {
-            const dir = `Nilesh/images/`;
-            await fs.ensureDir(dir);
-            cb(null, dir);
-        },
-        filename: function (req, file, cb) {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-            cb(null, file.fieldname + '-' + uniqueSuffix);
-        }
-    });
+    // const storage = multer.diskStorage({
+    //     destination: async function (req, file, cb) {
+    //         const dir = `Nilesh/images/`;
+    //         await fs.ensureDir(dir);
+    //         cb(null, dir);
+    //     },
+    //     filename: function (req, file, cb) {
+    //         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    //         cb(null, file.fieldname + '-' + uniqueSuffix);
+    //     }
+    // });
 
-    const upload = multer({storage,
-        fileFilter:   (req, file, cb) =>{
-            const fileTypes = /jpg|jpeg|png/
-            const mimeTypes = fileTypes.test(file.mimetype);
-            const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    // const upload = multer({storage,
+    //     fileFilter:   (req, file, cb) =>{
+    //         const fileTypes = /jpg|jpeg|png/
+    //         const mimeTypes = fileTypes.test(file.mimetype);
+    //         const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
             
             
 
-            if(mimeTypes && extname){
-            return cb(null, true);
-            }
+    //         if(mimeTypes && extname){
+    //         return cb(null, true);
+    //         }
 
-            cb(new Error('Error: File upload only supports the following filetypes - ' + fileTypes));
-        }
-    })
+    //         cb(new Error('Error: File upload only supports the following filetypes - ' + fileTypes));
+    //     }
+    // })
 
 
 
@@ -53,8 +53,8 @@
   
 
 
-    app.use("/Images", express.static("Images"))
-    app.use("/Nilesh/images", express.static("Nilesh/Images"))
+    // app.use("/Images", express.static("Images"))
+    // app.use("/Nilesh/images", express.static("Nilesh/Images"))
      
 
 
@@ -67,7 +67,7 @@
     }) 
 
     app.use("/api/auth", auth);
-    app.use("/api/book",upload.single("image"), book);
+    app.use("/api/book", book);
     app.use("/api/category", category);
     app.use("/api/cart", cart);
 
