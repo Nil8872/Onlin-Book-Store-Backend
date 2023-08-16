@@ -9,7 +9,7 @@ cloudinary.config({
   });
 
 
-
+console.log(process.env.CLOUDINARY_API_KEY);
 
 const uploadBase64Image = (base64)=>{
     return new Promise((resolve, reject)=>{
