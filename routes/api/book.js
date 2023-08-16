@@ -62,8 +62,8 @@ router.post("/", async(req, res) => {
 
  
       const data =  await uploadBase64Image(base64Image);
-       
-        const newBookData = {...bookData, image: data.url}
+       console.log(data);
+        const newBookData = {...bookData, image: data.secure_url}
        
        const result =  await Book.create(newBookData);
         console.log(result)
@@ -89,7 +89,7 @@ router.put("/:id", async (req, res) => {
   if((req.body.image).startsWith("data:image/jpeg;base64")){
     const data =  await uploadBase64Image(req.body.image);
        
-      updatedBookData = {...updatedBookData, image: data.url}
+      updatedBookData = {...updatedBookData, image: data.secure_url}
      
   }
    
